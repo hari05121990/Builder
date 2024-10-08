@@ -126,6 +126,26 @@ const routes = [
         element: lazy(() => import('./views/extra/createParties'))
       },
       {
+        exact: 'true',
+        path: '/add-material',
+        element: lazy(() => import('./views/extra/addMaterial'))
+      },
+      {
+        exact: 'true',
+        path: '/paymentIn',
+        element: lazy(() => import('./views/transactions/paymentIn'))
+      },
+      {
+        exact: 'true',
+        path: '/paymentOut',
+        element: lazy(() => import('./views/transactions/paymentOut'))
+      },
+      {
+        exact: 'true',
+        path: '/materialPurchase',
+        element: lazy(() => import('./views/transactions/materialPurchase'))
+      },
+      {
         path: '*',
         exact: 'true',
         element: () => <Navigate to={BASE_URL} />

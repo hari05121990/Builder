@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
+  Button,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
   InputLabel,
   Link,
@@ -10,14 +12,14 @@ import {
   RadioGroup,
   Select,
   TextField,
-  Typography,
-  Button,
-  FormHelperText
+  Typography
 } from '@mui/material';
-import React, { useState } from 'react';
+import { Form, Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
+import Swal from 'sweetalert2';
+import BaseURL from 'utils/authAxios';
 import BackdropLoading from 'utils/BackdropLoading';
-import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 
 const validationSchema = yup.object().shape({
@@ -34,7 +36,21 @@ const createParties = () => {
   const [partyWillPay, setPartyWillPay] = useState('');
   const [GSTState, setGSTState] = useState(false);
   const [bankDetailsState, setBankDetailsState] = useState(false);
-
+  const [partyTypes, setPartyTypes] = useState([]);
+  console.log('partyTypes', partyTypes);
+  useEffect(() => {
+    const getPartyTypes = async () => {
+      try {
+        const response = await BaseURL.get('api/partyTypes');
+        if (response.data.data) {
+          setPartyTypes(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPartyTypes();
+  }, []);
   const handleRadioChange = (event) => {
     const willPay = event.target.value;
     setPartyWillPay(event.target.value);
@@ -60,6 +76,31 @@ const createParties = () => {
   };
   const handleBankDetailsState = () => {
     setBankDetailsState(!bankDetailsState);
+  };
+
+  const onClickSubmit = (values) => {
+    BaseURL.post('api/create/parties', {
+      values
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.data) {
+          Swal.fire({
+            title: 'Party Created Successfully',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+          resetformik();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          title: 'Error',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
   };
   return (
     <Formik
@@ -87,6 +128,7 @@ const createParties = () => {
         console.log(values);
         // Reset form state or redirect upon successful submission
         setSubmitting(false);
+        onClickSubmit(values);
       }}
     >
       {({ values, errors, touched, handleChange, handleBlur, isSubmitting, isValid, dirty }) => (
@@ -136,9 +178,12 @@ const createParties = () => {
                             error={touched.partyType && Boolean(errors.partyType)}
                             helperText={touched.partyType && errors.partyType}
                           >
-                            <MenuItem value="1">1</MenuItem>
-                            <MenuItem value="2">2</MenuItem>
-                            <MenuItem value="3">3</MenuItem>
+                            <MenuItem value="">Select Party Type</MenuItem>
+                            {partyTypes.map((partyTypes) => (
+                              <MenuItem key={partyTypes.type_id} value={partyTypes.type_id}>
+                                {partyTypes.name}
+                              </MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       </Grid>

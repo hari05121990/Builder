@@ -143,6 +143,58 @@ const menuItems = {
               url: '/create-parties',
               classes: 'nav-item',
               icon: 'feather icon-user-plus'
+            },
+            {
+              id: 'add-material',
+              title: 'Add Material',
+              type: 'item',
+              url: '/add-material',
+              classes: 'nav-item',
+              icon: 'feather icon-plus'
+            }
+          ]
+        },
+        {
+          id: 'transactions',
+          title: 'Add Transaction',
+          type: 'collapse',
+          icon: 'feather icon-align-left',
+          badge: {
+            title: 'New',
+            type: 'label-danger'
+          },
+          children: [
+            {
+              id: 'paymentIn',
+              title: 'Payment In',
+              type: 'item',
+              url: '/paymentIn',
+              classes: 'nav-item',
+              icon: 'feather icon-plus-square'
+            },
+            {
+              id: 'paymentOut',
+              title: 'Payment Out',
+              type: 'item',
+              url: '/paymentOut',
+              classes: 'nav-item',
+              icon: 'feather icon-minus-square'
+            },
+            {
+              id: 'materialPurchase',
+              title: 'Material Purchase',
+              type: 'item',
+              url: '/materialPurchase',
+              classes: 'nav-item',
+              icon: 'feather icon-user-plus'
+            },
+            {
+              id: 'add-material',
+              title: 'Add Material',
+              type: 'item',
+              url: '/add-material',
+              classes: 'nav-item',
+              icon: 'feather icon-plus'
             }
           ]
         },
